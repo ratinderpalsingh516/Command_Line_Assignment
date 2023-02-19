@@ -4,17 +4,24 @@ Repository containing bash script files for the command line assignment
 ### Question 1. Write a bash script to get the current date, time, username, home directory and current working directory.
 ### Solution:
 
-echo Answer 1:  
-*Display Current date*  
-echo Current date: `date +%F`  
-*Display Current time*  
-echo Current time: `date +%T` 
-*Display Username*  
-echo Username: `whoami` 
-*Display Home directory*  
-echo Home directory: ~ 
-*Display Current working directory*  
-echo Current working directory: `pwd`  
+echo Answer 1:   
+*Display Current date*   
+echo Current date: `date +%F`   
+*Display Current time*   
+echo Current time: `date +%T`  
+*Display Username*   
+echo Username: `whoami`  
+*Display Home directory*   
+echo Home directory: ~   
+*Display Current working directory*    
+echo Current working directory: `pwd`    
+
+### Explanation:  
+● Used date command with format code %F with echo for displaying the full date; same as %Y-%m-%d.  
+● Used date command with format code %T with echo for displaying the time; same as %H:%M:%S.  
+● Used whoami command with echo for showing the current username.  
+● Used ~(tilde) with echo for displaying the home directory.  
+● Used pwd command with echo for displaying the current working directory.  
 
 ### Output:
 
@@ -61,6 +68,21 @@ do
 *end of while loop*    
 done  
 
+### Explanation:  
+● Used echo command prompting the user to enter the number, whose table the user wishes to see.  
+● Used read command to read user input into a variable n.  
+● Used -z switch to test if the expansion of "$n" is a null string or not. If it is a null string then the body is executed.  
+● Defined a string re to used as a regular expression to check whether input is valid number or not.  
+● re='^[0-9]+$', this regex ensures that the input string starts with a number, a number in between and also ends with a number; disallows any other character.  
+● Initialized a variable i with 1.  
+● Used a while loop to iterate over i from i=1 through i=10, -le specifies less than or equal to.  
+● Used a res variable to store the ith multiple of n.  
+● Used expr command to evaluate i*n and store the value in res.  
+● Used echo to display the current multiple of n in the format, n * i = res.  
+● Incremented the value of i to be used for the next iteration.  
+● Loops ends when the while condition evaluates to false; i<=10 in this case.  
+● The 'while loop' statement is closed by 'done' keyword.  
+
 ### Output:
 
 <img width="644" alt="Screenshot 2023-02-18 at 10 49 59 PM" src="https://user-images.githubusercontent.com/122514456/219879594-ae331bc5-8b7f-4da3-a2b2-640cfabb9562.png">
@@ -103,6 +125,20 @@ do
 done  
 echo "$n is a prime number."  
 
+### Explanation:  
+● Used echo command prompting the user to enter the number, which the user wishes to find out if it is prime or not.  
+● Used read command to read user input into a variable n.  
+● Used -z switch to test if the expansion of "$n" is a null string or not. If it is a null string then the body is executed.  
+● Defined a string re to used as a regular expression to check whether input is valid number or not.  
+● re='^[0-9]+$', this regex ensures that the input string starts with a number, a number in between and also ends with a number; disallows any other character.  
+● Placed a check to display the number isn't prime if the value equals 1.  
+● Used a for loop, initializing i as 2, iterating over i from 2 through n/2.  
+● Stored remainder of n%i in the variable ans inside the loop.  
+● If ans equalled 0, displayed the number isn't prime; exits with status of 0, indicating normal, error-free exit.  
+● Used fi keyword to close the if statement.   
+● The 'for loop' statement is closed by 'done' keyword.  
+● Echoes n is a prime number if the loop executed fully without exiting.  
+
 ### Output:
 
 <img width="642" alt="Screenshot 2023-02-18 at 10 50 54 PM" src="https://user-images.githubusercontent.com/122514456/219879626-8880c770-4586-458f-a068-26535e0feafe.png">
@@ -127,6 +163,14 @@ cat Table.sh >> ~/Documents/Assignment/File1.txt
 echo "Welcome to Sigmoid" >> ~/Documents/Assignment/File1.txt  
 *Displaying all the directories and files present in the Desktop folder*  
 ls -al /Users/ratinderpalsingh/Desktop  
+
+### Explanation:  
+● Used mkdir command to create a directory in the Documents directory.  
+● Used touch to create a file File.txt in the Assignment directory.  
+● Used cat command to redirect the contents of the file Table.sh into File1.txt by giving the absolute file path instead of printing the contents of the file to the standard output.  
+● Used >> to append the contents instead of writing.  
+● Used echo with >> to append the string "Welcome to Sigmoid" to the file File1.txt.   
+● Used ls -al command for displaying all the directories and files present in the Desktop folder; -a, all files and folders, including ones that are hidden and start with a '.'; -l, list all files in long format.  
 
 ### Output:
 
@@ -165,6 +209,21 @@ done
 echo "Length of the array is: ${#arr[@]}"  
 echo "Maximum element is: $max"   
 echo "Minimum element is: $min"  
+
+### Explanation:  
+● Used echo command prompting the user to enter an array, whose length, maximum and minimum element the user wishes to see.  
+● Used read command to read user input as space separated numbers into a variable arr; -a option specifies that the input is assigned to an array.  
+● Initialized a variable max with first element of the array.  
+● Initialized a variable min with first element of the array.  
+● Used a for loop to iterate over the array elements from start to the end; i as the current element of each iteration.  
+● Used conditional statement checking if i's value is greater than (hence the option -gt) the value in max variable, and updated max if the expression evaluated to true.  
+● Used conditional statement checking if i's value is lesser than (hence the option -lt) the value in min variable, and updated min if the expression evaluated to true.  
+● Used fi keyword to close the if statement.   
+● The 'for loop' statement is closed by 'done' keyword.  
+● Outputting all results, the length, max element, min element of the array.  
+● Used echo to display length of the array using ${#arr[@]}; if subscript is @ or *, the word expands to all members of name; by prefixing # to variable we will find length of the array (i.e number of elements).  
+● Used echo to display maximum element of the array stored in the max variable.   
+● Used echo to display minimum element of the array stored in the min variable.   
 
 ### Output:  
 
