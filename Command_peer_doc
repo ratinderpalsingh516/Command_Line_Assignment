@@ -1,0 +1,501 @@
+Question 1. Write a bash script to get the current date, time, username, home directory and current working directory.
+My solution:
+
+# Question 1
+echo Answer 1:
+# Display Current date
+echo Current date: `date +%F`
+# Display Current time
+echo Current time: `date +%T`
+# Display Username
+echo Username: `whoami`
+# Display Home directory
+echo Home directory: ~
+# Display Current working directory
+echo Current working directory: `pwd`
+
+Explanation:
+● Used date command with format code %F with echo for displaying the full date; same as %Y-%m-%d.
+● Used date command with format code %T with echo for displaying the time; same as %H:%M:%S.
+● Used whoami command with echo for showing the current username.
+● Used ~(tilde) with echo for displaying the home directory.
+● Used pwd command with echo for displaying the current working directory.
+
+Mahesh' solution:
+echo Answer 1-
+#command to get only date
+echo current date : $(date +%F )
+#command to get only time
+echo current time : $(date +%T )
+#command to get Username
+echo Username     : $(whoami)
+#command to get Home diretory
+echo Home directory: ~
+#command to get current working directory
+echo Current working directory :$(pwd)
+
+The difference:
+● The commands are quite the same to fetch the results with a subtle difference of '$' symbol used instead of '`' to run the commands with the echo command.
+
+Lav's solution:
+#!/bin/bash
+
+#Color formating for output
+PURPLE='\033[0;35m'
+NC='\033[0m' #no Color
+
+var=`date +"%d/%b/%Y %I:%m%p"`
+
+#printing date and time
+echo -e "Current date and time is ${PURPLE}${var}${NC}"
+
+#printing Username
+echo -e "Username is ${PURPLE}$(whoami)${NC}"
+
+#Printing Home Directory
+echo -e "Home directory is ${PURPLE}$(echo $HOME)${NC}"
+
+#printing Current working directory
+echo -e "Current working directory is ${PURPLE}$(pwd)${NC}"
+
+The difference:
+● The date command has a format code of "%d/%b/%Y %I:%m%p" instead of the format code %F; "%d/%b/%Y %I:%m%p" format code also displays the current time on a particular date.
+● He has also used a variable var for storing the date.
+● His solution also uses colour formatting for the output.
+● He has used purple colour as the output colour.
+
+
+Question 2. Write a bash script (name Table.sh) to print the Table of a number by using a while loop. It should support the following requirements.
+● The script should accept the input from the command line.
+● If you don’t input any data, then display an error message to execute the script correctly.
+My solution:
+
+# Question 2
+# Taking input from the user
+echo "Enter the number: "
+read n
+
+# Checks and prints message "No input entered" if the user provides no input 
+if [[ -z "$n" ]]; then
+   echo "No input entered"
+   exit 1
+fi
+
+# re='^[0-9]+$'
+# if ! [[ $n =~ $re ]] ; then
+#    echo "error: Not a number";
+#    exit 1
+# fi
+
+re='^[0-9]+$'
+if ! [[ $n =~ $re ]] ; then
+	echo "Not a number, invalid input";
+	exit 1
+fi
+
+# initializing i with 1
+i=1
+  
+# Looping i, i should be less than
+# or equal to 10, i.e., -le stands for less than or equal to
+while [ $i -le 10 ]
+do
+	res=`expr $i \* $n`
+
+	# printing on console
+	echo "$n * $i = $res"
+ 
+	# incrementing i by one 
+	# i = `expr $i + 1` 
+	((++i))
+  
+# end of while loop  
+done
+
+Explanation:
+● Used echo command prompting the user to enter the number, whose table the user wishes to see.
+● Used read command to read user input into a variable n.
+● Used -z switch to test if the expansion of "$n" is a null string or not. If it is a null string then the body is executed.
+● Defined a string re to used as a regular expression to check whether input is valid number or not.
+● re='^[0-9]+$', this regex ensures that the input string starts with a number, a number in between and also ends with a number; disallows any other character.
+● Initialized a variable i with 1.
+● Used a while loop to iterate over i from i=1 through i=10, -le specifies less than or equal to.
+● Used a res variable to store the ith multiple of n.
+● Used expr command to evaluate i*n and store the value in res.
+● Used echo to display the current multiple of n in the format, n * i = res.
+● Incremented the value of i to be used for the next iteration.
+● Loops ends when the while condition evaluates to false; i<=10 in this case.
+● The 'while loop' statement is closed by 'done' keyword.
+
+Mahesh's solution:
+#Question 2
+echo "Enter the number -"
+#Taking user input
+read n
+
+# Cheking through case statement
+case $n in
+# To check if it is a valid number or not		
+*[^0-9]*)
+	echo "Please provide avalid input"
+	;;
+# Regex to check for number	
+[0-9]*)
+i=1			
+while [ $i -le 10 ]
+do
+res=`expr $i \* $n`
+
+echo "$n * $i = $res"
+((++i))
+done
+;;
+# condtion to check for no input
+*)
+	echo "Error !Please provide input"
+	;;
+esac
+
+The difference:
+● He has used case instead of if conditional statement to check the legitimacy of the input.
+● He has used '*[^0-9]*' as regex instead of '^[0-9]+$'. His regex allows input starting with number from 0-9 but doesn't handle the case when a number at the start with any other character at the end is provided as an input.
+● esac is used to end the case statement unlike fi is used to end the if statement.
+
+Lav's solution:
+#!/bin/bash
+
+#color formating for output
+RED='\033[0;31m'
+OLIVE='\033[0;33m'
+NC='\033[0m' # No Color
+
+# Taking input
+read -p 'Enter the number: ' val
+
+# Check for empty string
+while [[ -z $val ]]; do
+    echo -e "Please enter something, ${RED}empty input${NC} not accepted!"
+    echo -e "If you want to exit then enter ${OLIVE}\"quit\" ${NC}or ${OLIVE}\"q\"${NC}"
+    read -p 'Enter the number: ' val
+
+    if [[ "$val" == "q" || "$val" == "quit" ]]; then
+        echo -e "${RED}Exiting"
+        exit
+    fi
+done
+
+# Check for number
+while ! [[ "$val" =~ ^[0-9]+$ ]]; do
+    echo -e "Please ${RED}enter ${NC}a ${RED}number${NC}"
+    read -p 'Enter a number: ' val
+done
+
+#Printing Table
+i=1
+echo -e "\nTable is"
+while (( i <= 10 )); do
+    printf "%s %-2s %s \n" "$val *" "$i" "= $(($val*$i))"
+    ((i++))
+done
+
+The difference:
+● At first he defines the colour formatting for the output; red and olive colours to be used for the output.
+● He uses -p option with the read command.
+● The -p option makes it read as a prompt, meaning it doesn't add a trailing newline before trying to read input.
+● His solution provides the user option to exit by giving 'quit' or 'q' as the input.
+● Displays exiting in red if user provides the input 'quit' or 'q'.
+
+
+Question 3. Write a Function in bash script to check if the number is prime or not? It should support the following requirement.
+● The script should accept the input from the User.
+My solution:
+
+# Question 3
+echo "Enter the number: "
+# User input for number
+read n
+
+# Checks and prints message "No input entered" if the user provides no input 
+if [[ -z "$n" ]]; then
+   echo "No input entered"
+   exit 1
+fi
+
+re='^[0-9]+$'
+if ! [[ $n =~ $re ]] ; then
+	echo "Not a number, invalid input";
+	exit 1
+fi
+
+if [ $n -eq 1 ]; then
+	echo "$n is not prime"
+	exit 0
+fi
+
+# Looping i, from 2 through n/2
+for((i=2; i<=$n/2; i++))
+do
+  ans=$(( n%i ))
+  if [ $ans -eq 0 ]
+  then
+    echo "$n is not a prime number."
+    exit 0
+  fi
+done
+echo "$n is a prime number."
+
+Explanation:
+● Used echo command prompting the user to enter the number, which the user wishes to find out if it is prime or not.
+● Used read command to read user input into a variable n.
+● Used -z switch to test if the expansion of "$n" is a null string or not. If it is a null string then the body is executed.
+● Defined a string re to used as a regular expression to check whether input is valid number or not.
+● re='^[0-9]+$', this regex ensures that the input string starts with a number, a number in between and also ends with a number; disallows any other character.
+● Placed a check to display the number isn't prime if the value equals 1.
+● Used a for loop, initializing i as 2, iterating over i from 2 through n/2.
+● Stored remainder of n%i in the variable ans inside the loop.
+● If ans equalled 0, displayed the number isn't prime; exits with status of 0, indicating normal, error-free exit.
+● Used fi keyword to close the if statement. 
+● The 'for loop' statement is closed by 'done' keyword.
+● Echoes n is a prime number if the loop executed fully without exiting.
+
+Mahesh's solution:
+echo "Enter the number -"
+#Taking the input
+read n
+i=2
+
+#flag , it will change into 1 if n will be not a prime number
+flag=0
+while test $i -le `expr $n / 2`
+do
+if test `expr $n % $i` -eq 0
+then
+flag=1
+fi
+i=`expr $i + 1`
+done 
+
+if test $n -eq 1
+then 
+echo "The number is Not Prime"
+elif test $flag -eq 1
+then
+echo "The number is Not Prime"
+else
+echo "The number is Prime"
+fi
+
+The difference:
+● The only difference is that he is using a variable flag.
+● If flag equals 0 then the number is prime; if flag changes to 1 then the number is not prime.
+
+Lav's solution:
+#!/bin/bash
+
+# colors for formatting output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
+#Taking input from User
+read -p "Enter number: " val
+
+# Get square root of number
+sqrt_val=$(echo "scale=0; sqrt($val)" | bc)
+
+# Check if square root or not
+i=2
+while (( $i <= $sqrt_val )); do
+
+    if (($val % $i == 0)); then
+        echo -e "Number ${RED}not prime${NC}, divisible by $i, $val / $i = $(( $val/$i ))"
+        exit
+    fi
+    (( ++i ))
+done
+
+echo -e "Number is ${GREEN}prime"
+
+The difference:
+● He has defined colors for formatting output; RED, GREEN and NC for no colour.
+● He has iterated over i from 2 through square root of the given number.
+● This is because every composite number has a prime factor not greater than its square root.
+● Displays prime in green if the number is prime.
+
+
+Question 4. Create a bash script that supports the following requirement.
+● Create a folder ‘Assignment’.
+● Create a file ‘File1.txt’ inside ‘Assignment’ Folder.
+● Copy all the content of Table.sh(2nd script) in ‘File1.txt’ without using ‘cp’ and ‘mv’
+command.
+● Append the text Welcome to Sigmoid’ to the ‘File1.txt’ file.
+● List all the directories and files present inside Desktop Folder.
+My solution:
+
+# Question 4
+# making an empty directory, Assignment, in Documents directory
+mkdir ~/Documents/Assignment
+# making a file, File1.txt, in Assignment directory
+touch ~/Documents/Assignment/File1.txt
+# moving the contents of the source file Table.sh, to the destination file File1.txt 
+cat Table.sh >> ~/Documents/Assignment/File1.txt
+# Appending the text "Welcome to Sigmoid" in File1.txt
+echo "Welcome to Sigmoid" >> ~/Documents/Assignment/File1.txt
+# Displaying all the directories and files present in the Desktop folder
+ls -al /Users/ratinderpalsingh/Desktop
+
+Explanation:
+● Used mkdir command to create a directory in the Documents directory.
+● Used touch to create a file File.txt in the Assignment directory.
+● Used cat command to redirect the contents of the file Table.sh into File1.txt by giving the absolute file path instead of printing the contents of the file to the standard output.
+● Used >> to append the contents instead of writing.
+● Used echo with >> to append the string "Welcome to Sigmoid" to the file File1.txt. 
+● Used ls -al command for displaying all the directories and files present in the Desktop folder; -a, all files and folders, including ones that are hidden and start with a '.'; -l, list      all files in long format.
+
+Mahesh's solution:
+mkdir Assignment
+touch Assignment/File1.txt
+cat Table.sh  >> Assignment/File1.txt
+
+echo "  Welcome to Sigmoid" >> Assignment/File1.txt
+
+ls -l ~/Desktop
+
+The difference:
+● The main difference is that he has used -l option instead of -al, with the ls command; which doesn't show the hidden files.
+
+Lav's solution:
+#!/bin/bash
+
+#creating directory
+mkdir ~/Desktop/Assignments
+
+#creating a file
+touch ~/Desktop/Assignments/File1.txt
+
+
+while read line; do
+  echo "$line" >> ~/Desktop/Assignments/File1.txt
+done < Table.sh
+
+echo "Welcome to Sigmoid" >> ~/Desktop/Assignment/File1.txt
+
+ls -la ~/Desktop/
+
+The difference:
+● He has used a while loop to read each line from Table.sh file into a variable line and then appending the content of the line variable into File1.txt.
+● Each line is 'written' into the variable line and 'appended' into the destination file File1.txt. 
+
+
+Question 5. You have given an array. Using Bash script, print its length, maximum element and minimum element.
+arr=( 2 3 4 1 6 7).
+My solution:
+
+# Question 5
+echo "Enter an array: "
+# User input for the array
+read -a arr
+
+# Initialize max variable with arr[0]
+max=${arr[0]}
+# Initialize min variable with arr[0]
+min=${arr[0]}
+
+# Loop through all elements in the array
+for i in "${arr[@]}"
+do
+    # Update max if applicable
+    if [[ "$i" -gt "$max" ]]; then
+        max="$i"
+    fi
+
+    # Update min if applicable
+    if [[ "$i" -lt "$min" ]]; then
+        min="$i"
+    fi
+done
+
+# Output results:
+echo "Length of the array is: ${#arr[@]}"
+echo "Maximum element is: $max"
+echo "Minimum element is: $min"
+
+Explanation:
+● Used echo command prompting the user to enter an array, whose length, maximum and minimum element the user wishes to see.
+● Used read command to read user input as space separated numbers into a variable arr; -a option specifies that the input is assigned to an array.
+● Initialized a variable max with first element of the array.
+● Initialized a variable min with first element of the array.
+● Used a for loop to iterate over the array elements from start to the end; i as the current element of each iteration.
+● Used conditional statement checking if i's value is greater than (hence the option -gt) the value in max variable, and updated max if the expression evaluated to true.
+● Used conditional statement checking if i's value is lesser than (hence the option -lt) the value in min variable, and updated min if the expression evaluated to true.
+● Used fi keyword to close the if statement. 
+● The 'for loop' statement is closed by 'done' keyword.
+● Outputting all results, the length, max element, min element of the array.
+● Used echo to display length of the array using ${#arr[@]}; if subscript is @ or *, the word expands to all members of name; by prefixing # to variable we will find length of the array       (i.e number of elements).
+● Used echo to display maximum element of the array stored in the max variable. 
+● Used echo to display minimum element of the array stored in the min variable. 
+
+Mahesh's solution:
+# Taking all the element of the array
+read -a integers
+
+# we assume here that biggest and smallest element of the array is the first value of the array
+biggest=${integers[0]}
+smallest=${integers[0]}
+
+for i in ${integers[@]}
+do
+     if [[ $i -gt $biggest ]]  # condition for biggest value
+     then
+        biggest="$i"
+     fi
+
+     if [[ $i -lt $smallest ]]  # condition for smallest value
+     then
+        smallest="$i"
+     fi
+done
+echo "The length of the array is ${#integers[@]}"
+echo "The largest number is $biggest"
+echo "The smallest number is $smallest"
+
+The difference:
+● He has used a variable named integers instead of arr to store the array.
+● Otherwise the code is quite similar.
+
+Lav's solution:
+#!/bin/bash
+
+#color formatting and styling for output
+BOLD='\033[1m'
+NC='\033[0m'
+PURPLE='\033[0;35m'
+
+#initilasing and printing an array
+arr=(2 3 4 1 6 7)
+echo "Array is (${arr[@]})"
+
+#printing the length of array
+echo -e "\nLength of array is ${PURPLE}${BOLD}${#arr[@]}${NC}"
+
+#variable to store max and min element of array
+max=${arr[0]}
+min=${arr[0]}
+
+#iterating through the array to find max and min
+for i in ${arr[@]}; do
+    if (( ${i} < ${min} )); then
+        min=${i}
+    fi
+    if (( ${i} > ${max} )); then
+        max=${i}
+    fi
+done
+
+#printing maximum and minimum
+echo -e "Minimum element = ${PURPLE}${BOLD}${min}${NC}"
+echo -e "Maximum element = ${PURPLE}${BOLD}${max}${NC}"
+
+The difference:
+● He has used color formatting and styling for output.
+● He has used purple colour to display the length, the maximum and the minimum element of the array.
